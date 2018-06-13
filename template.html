@@ -1,5 +1,6 @@
 <div  qv-extension style="height: 100%; position: relative; overflow: auto;" class="ng-scope">
 	<span style="color:black;font-size:{{titleFontSize}}px"> Statistics for {{measureTitle}} by {{dimTitle}}</span> <br>
-	<span style="line-height:{{lineHeight}}" ng-repeat="item in summary_items"> <span style="color:{{titleColor}};font-size:{{titleFontSize}}px;" >{{item.display}}</span>: <span style="color:{{valueColor}};font-size:{{valueFontSize}}px" >{{item.value}}</span>  <br ng-if="orientation=='V'"> </span>
+	
+	<div style="margin:{{lineMargin}}px;line-height:{{lineHeight}};background-color:{{lineBackground}}" ng-repeat="item in summary_items"> <span style="color:{{titleColor}};font-size:{{titleFontSize}}px;" >{{item.display}}</span>: <span style="color:{{valueColor}};font-size:{{valueFontSize}}px" >{{item.value}}</span>  <br ng-if="orientation=='V'"> </div>
 		
 </div>

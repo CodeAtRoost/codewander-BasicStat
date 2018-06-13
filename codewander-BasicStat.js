@@ -38,7 +38,7 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								label:"Title Color",
 								ref: "titleColor",
 								expression:"never",
-								defaultValue:"green"								
+								defaultValue:"black"								
 							},
 							ValueColor:{
 								type:"string",
@@ -52,7 +52,7 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								label:"Font Size (px)",
 								ref: "fontSize",
 								expression:"never",
-								defaultValue:"20"								
+								defaultValue:"18"								
 							},
 							/*DecimalPrecision:{
 								type:"string",
@@ -66,8 +66,23 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								label:"Line Height",
 								ref: "lineHeight",
 								expression:"never",
-								defaultValue:"1.25"								
+								defaultValue:"2"								
+							},
+							LineBackground:{
+								type:"string",
+								label:"Line Background",
+								ref: "linebgColor",
+								expression:"never",
+								defaultValue:"#d5f7b7"								
+							},
+							LineMargin:{
+								type:"string",
+								label:"Line Margin (px)",
+								ref: "lineMargin",
+								expression:"never",
+								defaultValue:"2"								
 							}
+							
 							
 						}
 					}
@@ -100,6 +115,8 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				this.$scope.measureTitle=this.$scope.layout.qHyperCube.qMeasureInfo[0].qFallbackTitle;
 				this.$scope.dimTitle=this.$scope.layout.qHyperCube.qDimensionInfo[0].qFallbackTitle;
 				this.$scope.lineHeight= this.$scope.layout.lineHeight;
+				this.$scope.lineBackground= this.$scope.layout.linebgColor;
+				this.$scope.lineMargin=this.$scope.layout.lineMargin;
 				
 				var decimalPrecision=this.$scope.layout.decimalPrecision? this.$scope.layout.decimalPrecision:"1";
 				var tot = Math.round((math.sum(statArray)*10*(decimalPrecision)))/(10*decimalPrecision);
