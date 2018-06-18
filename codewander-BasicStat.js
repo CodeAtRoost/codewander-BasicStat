@@ -81,6 +81,14 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								ref: "lineMargin",
 								expression:"never",
 								defaultValue:"2"								
+							},
+							Orientation:{
+								type: "string",
+								component: "dropdown",
+								label: "Orientation",
+								ref: "orientation",
+								options: [{value:'1',label:'Vertical'},{value:'0',label:'Horizontal'}],
+								defaultValue:'1'
 							}
 							
 							
@@ -117,6 +125,7 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				this.$scope.lineHeight= this.$scope.layout.lineHeight;
 				this.$scope.lineBackground= this.$scope.layout.linebgColor;
 				this.$scope.lineMargin=this.$scope.layout.lineMargin;
+				this.$scope.orientation=this.$scope.layout.orientation;
 				
 				var decimalPrecision=this.$scope.layout.decimalPrecision? this.$scope.layout.decimalPrecision:"1";
 				var tot = Math.round((math.sum(statArray)*10*(decimalPrecision)))/(10*decimalPrecision);
