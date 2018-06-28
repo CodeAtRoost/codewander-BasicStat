@@ -89,6 +89,139 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								ref: "orientation",
 								options: [{value:'1',label:'Vertical'},{value:'0',label:'Horizontal'}],
 								defaultValue:'1'
+							},
+							Show:{
+								component: "items",
+								label: "Metric Display Options",
+								items:{
+									SampleCount:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Sample Count",
+										ref: "sampleCount",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Sum:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Sum",
+										ref: "Sum",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Mean:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Mean",
+										ref: "Mean",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Median:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Median",
+										ref: "Median",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Mode:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Mode",
+										ref: "Mode",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Min:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Minimum Value",
+										ref: "Min",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Max:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Max",
+										ref: "Max",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									StandardDeviation:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Standard Deviation",
+										ref: "stdDev",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									},
+									Variance:{
+										type: "boolean",
+										component: "switch",
+										label: "Show Variance",
+										ref: "Variance",
+										options: [{
+											value: true,
+											label: "Yes"
+										}, {
+											value: false,
+											label: "No"
+										}],
+										defaultValue: true					
+									}
+								
+								}
 							}
 							
 							
@@ -137,15 +270,27 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				var stdev=Math.round(math.std(statArray)*10*decimalPrecision)/(10*decimalPrecision);
 				var variance = Math.round(math.var(statArray)*10*decimalPrecision)/(10*decimalPrecision);
 				this.$scope.summary_items=[];
-				this.$scope.summary_items.push({"display":"Sample count", "value":d.length});
-				this.$scope.summary_items.push({"display": "Sum", "value":tot});
-				this.$scope.summary_items.push({"display": "Mean", "value":mean});
-				this.$scope.summary_items.push({"display": "Median", "value":median});
-				this.$scope.summary_items.push({"display": "Mode", "value":mode});
-				this.$scope.summary_items.push({"display": "Min", "value":min});
-				this.$scope.summary_items.push({"display": "Max", "value":max});
-				this.$scope.summary_items.push({"display": "Standard deviation", "value":stdev});
-				this.$scope.summary_items.push({"display": "Variance", "value":variance});
+				this.$scope.sampleCount=this.$scope.layout.sampleCount==null? true:this.$scope.layout.sampleCount;
+				this.$scope.Sum=this.$scope.layout.Sum==null? true:this.$scope.layout.Sum;
+				this.$scope.Mean=this.$scope.layout.Mean==null? true:this.$scope.layout.Mean;
+				this.$scope.Median=this.$scope.layout.Median==null? true:this.$scope.layout.Median;
+				this.$scope.Mode=this.$scope.layout.Mode==null? true:this.$scope.layout.Mode;
+				this.$scope.Min=this.$scope.layout.Min==null? true:this.$scope.layout.Min;
+				this.$scope.Max=this.$scope.layout.Max==null? true:this.$scope.layout.Max;
+				this.$scope.stdDev=this.$scope.layout.stdDev==null? true:this.$scope.layout.stdDev;
+				this.$scope.Variancec=this.$scope.layout.Variance==null? true:this.$scope.layout.Variance;
+				
+				
+				
+				if( this.$scope.sampleCount) this.$scope.summary_items.push({"display":"Sample count", "value":d.length});
+				if( this.$scope.Sum)this.$scope.summary_items.push({"display": "Sum", "value":tot});
+				if( this.$scope.Mean)this.$scope.summary_items.push({"display": "Mean", "value":mean});
+				if( this.$scope.Median)this.$scope.summary_items.push({"display": "Median", "value":median});
+				if( this.$scope.Mode)this.$scope.summary_items.push({"display": "Mode", "value":mode});
+				if( this.$scope.Min)this.$scope.summary_items.push({"display": "Min", "value":min});
+				if( this.$scope.Max)this.$scope.summary_items.push({"display": "Max", "value":max});
+				if( this.$scope.stdDev)this.$scope.summary_items.push({"display": "Standard deviation", "value":stdev});
+				if( this.$scope.Variance)this.$scope.summary_items.push({"display": "Variance", "value":variance});
 				
 				
 				return qlik.Promise.resolve();
