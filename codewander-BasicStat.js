@@ -11,7 +11,7 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 					qMeasures: [],
 					qInitialDataFetch: [{
 						qWidth: 2,
-						qHeight: 1000
+						qHeight: 5000
 					}]
 				}
 			},			
@@ -244,10 +244,33 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 			},
 			paint: function () {
 				var d=this.$scope.layout.qHyperCube.qDataPages[0].qMatrix;
+				var max_item=[];
+				var min_item=[];
 				var statArray=[];
+				var item_min=null;
+				var item_max=null;
 				for (var i=0; i<d.length;i++)
 				{
+					if (!isNaN(d[i][1].qNum)){
+					if (item_min==null || d[i][1].qNum< item_min ){
+						item_min= d[i][1].qNum;
+						min_item=[];
+						min_item.push(d[i][0].qText);
+					}
+					else if (d[i][1].qNum== item_min){
+						min_item.push(d[i][0].qText);
+					}
+					else if (item_max==null || d[i][1].qNum> item_max ){
+						item_max= d[i][1].qNum;
+						max_item=[];
+						max_item.push(d[i][0].qText);
+					}
+					else if (d[i][1].qNum== item_max){
+						max_item.push(d[i][0].qText);
+					}
 					statArray.push(d[i][1].qNum);
+					}
+					
 				}
 				this.$scope.titleColor= this.$scope.layout.titleColor? this.$scope.layout.titleColor: "black";
 				this.$scope.valueColor=this.$scope.layout.valueColor? this.$scope.layout.valueColor:"black";
@@ -287,10 +310,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				if( this.$scope.Mean)this.$scope.summary_items.push({"display": "Mean", "value":mean});
 				if( this.$scope.Median)this.$scope.summary_items.push({"display": "Median", "value":median});
 				if( this.$scope.Mode)this.$scope.summary_items.push({"display": "Mode", "value":mode});
-				if( this.$scope.Min)this.$scope.summary_items.push({"display": "Min", "value":min});
-				if( this.$scope.Max)this.$scope.summary_items.push({"display": "Max", "value":max});
+				if( this.$scope.Min){this.$scope.summary_items.push({"display": "Min", "value":min});
+				this.$scope.summary_items.push({"display": "Min Value Items", "value":min_item.toString()})}				
+				if( this.$scope.Max){this.$scope.summary_items.push({"display": "Max", "value":max});
+				this.$scope.summary_items.push({"display": "Max Value Items", "value":max_item.toString()})}
 				if( this.$scope.stdDev)this.$scope.summary_items.push({"display": "Standard deviation", "value":stdev});
 				if( this.$scope.Variance)this.$scope.summary_items.push({"display": "Variance", "value":variance});
+				
 				
 				
 				return qlik.Promise.resolve();
