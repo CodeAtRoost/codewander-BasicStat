@@ -94,11 +94,12 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 								component: "items",
 								label: "Metric Display Options",
 								items:{
-									SampleCount:{
+									
+									Header:{
 										type: "boolean",
 										component: "switch",
-										label: "Show Sample Count",
-										ref: "sampleCount",
+										label: "Show Header",
+										ref: "showHeader",
 										options: [{
 											value: true,
 											label: "Yes"
@@ -107,6 +108,41 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 											label: "No"
 										}],
 										defaultValue: true					
+									},
+									HeaderLabel:{
+											type:"string",
+											label:"Custom Header Label",
+											ref: "headerLabel",
+											expression:"never",
+											defaultValue:""										
+									},
+									
+									SampleCount:{
+										component: "items",
+										label: "",
+										items:{
+										Display:{
+											type: "boolean",
+											component: "switch",
+											label: "Show Sample Count",
+											ref: "sampleCount",
+											options: [{
+												value: true,
+												label: "Yes"
+											}, {
+												value: false,
+												label: "No"
+											}],
+											defaultValue: true	
+										},
+										Text:{
+											type:"string",
+											label:"Sample Count Label",
+											ref: "sampleCountLabel",
+											expression:"never",
+											defaultValue:"Sample Count"											
+										}
+										}
 									},
 									Sum:{
 										type: "boolean",
@@ -122,6 +158,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 										}],
 										defaultValue: true					
 									},
+									SumLabel:{
+											type:"string",
+											label:"Sum Label",
+											ref: "sumLabel",
+											expression:"never",
+											defaultValue:"Sum"											
+									},
 									Mean:{
 										type: "boolean",
 										component: "switch",
@@ -135,6 +178,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 											label: "No"
 										}],
 										defaultValue: true					
+									},
+									MeanLabel:{
+											type:"string",
+											label:"Mean Label",
+											ref: "meanLabel",
+											expression:"never",
+											defaultValue:"Mean"											
 									},
 									Median:{
 										type: "boolean",
@@ -150,6 +200,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 										}],
 										defaultValue: true					
 									},
+									MedianLabel:{
+											type:"string",
+											label:"Median Label",
+											ref: "medianLabel",
+											expression:"never",
+											defaultValue:"Median"											
+									},
 									Mode:{
 										type: "boolean",
 										component: "switch",
@@ -163,6 +220,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 											label: "No"
 										}],
 										defaultValue: true					
+									},
+									ModeLabel:{
+											type:"string",
+											label:"Mode Label",
+											ref: "modeLabel",
+											expression:"never",
+											defaultValue:"Mode"											
 									},
 									Min:{
 										type: "boolean",
@@ -178,6 +242,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 										}],
 										defaultValue: true					
 									},
+									MinLabel:{
+											type:"string",
+											label:"Min Label",
+											ref: "minLabel",
+											expression:"never",
+											defaultValue:"Min"											
+									},
 									Max:{
 										type: "boolean",
 										component: "switch",
@@ -191,6 +262,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 											label: "No"
 										}],
 										defaultValue: true					
+									},
+									MaxLabel:{
+											type:"string",
+											label:"Max Label",
+											ref: "maxLabel",
+											expression:"never",
+											defaultValue:"Max"											
 									},
 									StandardDeviation:{
 										type: "boolean",
@@ -206,6 +284,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 										}],
 										defaultValue: true					
 									},
+									StdLabel:{
+											type:"string",
+											label:"Standard Dev Label",
+											ref: "stdLabel",
+											expression:"never",
+											defaultValue:"Standard Deviation"											
+									},
 									Variance:{
 										type: "boolean",
 										component: "switch",
@@ -219,6 +304,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 											label: "No"
 										}],
 										defaultValue: true					
+									},
+									VarianceLabel:{
+											type:"string",
+											label:"Variance Label",
+											ref: "varianceLabel",
+											expression:"never",
+											defaultValue:"Variance"											
 									}
 								
 								}
@@ -243,6 +335,7 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				exportData: false
 			},
 			paint: function () {
+				var invalidItems=[];
 				var d=this.$scope.layout.qHyperCube.qDataPages[0].qMatrix;
 				var max_item=[];
 				var min_item=[];
@@ -270,6 +363,9 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 					}
 					statArray.push(d[i][1].qNum);
 					}
+					else{
+						invalidItems.push(d[i][0].qText);
+					}
 					
 				}
 				this.$scope.titleColor= this.$scope.layout.titleColor? this.$scope.layout.titleColor: "black";
@@ -278,10 +374,13 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				this.$scope.valueFontSize=this.$scope.layout.fontSize? this.$scope.layout.fontSize:"20";
 				this.$scope.measureTitle=this.$scope.layout.qHyperCube.qMeasureInfo[0].qFallbackTitle;
 				this.$scope.dimTitle=this.$scope.layout.qHyperCube.qDimensionInfo[0].qFallbackTitle;
+				this.$scope.showHeader=this.$scope.layout.showHeader;
+				this.$scope.HeaderLabel=this.$scope.layout.headerLabel =="" ? "Statistics for " + this.$scope.measureTitle + " by " + this.$scope.dimTitle : this.$scope.layout.headerLabel;
 				this.$scope.lineHeight= this.$scope.layout.lineHeight;
 				this.$scope.lineBackground= this.$scope.layout.linebgColor;
 				this.$scope.lineMargin=this.$scope.layout.lineMargin;
 				this.$scope.orientation=this.$scope.layout.orientation;
+				this.$scope.invalidItems= invalidItems;
 				
 				var decimalPrecision=this.$scope.layout.decimalPrecision? this.$scope.layout.decimalPrecision:"1";
 				var tot = Math.round((math.sum(statArray)*10*(decimalPrecision)))/(10*decimalPrecision);
@@ -301,21 +400,21 @@ define( ["qlik", "text!./template.html", "./lib/js/math"],
 				this.$scope.Min=this.$scope.layout.Min==null? true:this.$scope.layout.Min;
 				this.$scope.Max=this.$scope.layout.Max==null? true:this.$scope.layout.Max;
 				this.$scope.stdDev=this.$scope.layout.stdDev==null? true:this.$scope.layout.stdDev;
-				this.$scope.Variancec=this.$scope.layout.Variance==null? true:this.$scope.layout.Variance;
+				this.$scope.Variance=this.$scope.layout.Variance==null? true:this.$scope.layout.Variance;
 				
 				
 				
-				if( this.$scope.sampleCount) this.$scope.summary_items.push({"display":"Sample count", "value":d.length});
-				if( this.$scope.Sum)this.$scope.summary_items.push({"display": "Sum", "value":tot});
-				if( this.$scope.Mean)this.$scope.summary_items.push({"display": "Mean", "value":mean});
-				if( this.$scope.Median)this.$scope.summary_items.push({"display": "Median", "value":median});
-				if( this.$scope.Mode)this.$scope.summary_items.push({"display": "Mode", "value":mode});
-				if( this.$scope.Min){this.$scope.summary_items.push({"display": "Min", "value":min});
-				this.$scope.summary_items.push({"display": "Min Value Items", "value":min_item.toString()})}				
-				if( this.$scope.Max){this.$scope.summary_items.push({"display": "Max", "value":max});
-				this.$scope.summary_items.push({"display": "Max Value Items", "value":max_item.toString()})}
-				if( this.$scope.stdDev)this.$scope.summary_items.push({"display": "Standard deviation", "value":stdev});
-				if( this.$scope.Variance)this.$scope.summary_items.push({"display": "Variance", "value":variance});
+				if( this.$scope.sampleCount) this.$scope.summary_items.push({"display":this.$scope.layout.sampleCountLabel, "value":d.length});
+				if( this.$scope.Sum)this.$scope.summary_items.push({"display": this.$scope.layout.sumLabel, "value":tot});
+				if( this.$scope.Mean)this.$scope.summary_items.push({"display": this.$scope.layout.meanLabel, "value":mean});
+				if( this.$scope.Median)this.$scope.summary_items.push({"display": this.$scope.layout.medianLabel, "value":median});
+				if( this.$scope.Mode)this.$scope.summary_items.push({"display": this.$scope.layout.modeLabel, "value":mode});
+				if( this.$scope.Min){this.$scope.summary_items.push({"display": this.$scope.layout.minLabel, "value":min});
+				this.$scope.summary_items.push({"display": this.$scope.layout.minLabel+ " Value Items", "value":min_item.toString()})}				
+				if( this.$scope.Max){this.$scope.summary_items.push({"display": this.$scope.layout.maxLabel, "value":max});
+				this.$scope.summary_items.push({"display": this.$scope.layout.maxLabel+" Value Items", "value":max_item.toString()})}
+				if( this.$scope.stdDev)this.$scope.summary_items.push({"display": this.$scope.layout.stdLabel, "value":stdev});
+				if( this.$scope.Variance)this.$scope.summary_items.push({"display": this.$scope.layout.varianceLabel, "value":variance});
 				
 				
 				
