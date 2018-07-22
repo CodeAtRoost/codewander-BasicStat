@@ -1,4 +1,8 @@
 # codewander-BasicStat
+7/22/2018:
+Added feature to show or hide header, Option to set custom header and metric labels.
+Introduced a footnote to mention the number of items that had invalid numbers.
+
 7/11/2018:
 Added the feature to display the items holding minimum and maximum values, if minimum or maximum value is set to be shown.
 Increased the size of the hypercube
